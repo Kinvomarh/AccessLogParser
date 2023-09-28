@@ -3,9 +3,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        String path;
+        int count=0;
         while (true){
-            String path;
-            int count=0;
             path = new Scanner(System.in).nextLine();
             File file = new File(path);
             boolean fileExists = file.exists();
