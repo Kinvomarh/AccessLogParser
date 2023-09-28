@@ -14,17 +14,17 @@ public class Main {
                 System.out.println("Это путь к директории");
                 continue;
             }
-            else {
-                if(!fileExists){
+
+            if(!fileExists){
                     System.out.println("файл не найден");
-                    continue;
                 }
+
                 else {
                     System.out.println("Путь указан верно");
                     count++;
                     System.out.println("Это файл номер " + count);
                 }
-            }
+
         }
     }
 }
