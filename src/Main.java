@@ -6,75 +6,37 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String path;
-        int count=0;
-        File file;
-        int countline;
-        int maxlengh;
-        int minlengh;
+            while (true) {
+                int countLine;
+                int countYandexBot = 0;
+                int countGoogleBot = 0;
+                System.out.println("Введите путь к файлу:");
+                String path = "D:\\access.log";//new Scanner(System.in).nextLine(); //считываем путь к файлу
+                FileParsing fileParsing = FileParsing.fileParsing(path); // Создаем объект парсинга файла
+                if (fileParsing != null) { // проверяем что объект создан
+                    countLine = fileParsing.getCountLine(); // сохраняем количество строк в файле
+                    for (int i = 0; i < countLine; i++) { // пробегаемся по строкам
+                          if(!fileParsing.getListLine().get(i).equals("")) {
+                            LineParsing lineParsing = new LineParsing(fileParsing.getListLine().get(i));//на каждую создаем объект парсинга строки
+                            UserAgent userAgent = new UserAgent(lineParsing.getUserAgent()); //Создаем Обект парсинга User-Agent
+                                if (userAgent.getBot() != null && userAgent.getBot().equals("YandexBot")) countYandexBot++; // Подсчитываем количество YandexBot
+                                if (userAgent.getBot() != null && userAgent.getBot().equals("Googlebot")) countGoogleBot++; // Подсчитываем количество Googlebot
+                        }
 
 
-        //В цикле проверяем все введенные пути к файлу
-        while (true){
-            countline=0;
-            maxlengh=0;
-            minlengh=0;
-            path = new Scanner(System.in).nextLine();
-            file = new File(path);
-            boolean fileExists = file.exists();
-            boolean isDirectory = file.isDirectory();
-            if (isDirectory) {
-                System.out.println("Это путь к директории");
-                continue;
-            }
-            //Считаем количество попыткок. Выводим на экран номер попытки, где файл указан верно
-            if(!fileExists){
-                    System.out.println("файл не найден");
+                    }
+                    System.out.println("общее количество строк в файле: " + countLine);
+                    System.out.println("доля YandexBot: " + (double) countYandexBot / countLine * 100 + "%");
+                    System.out.println("доля GoogleBot: " + (double) countGoogleBot / countLine * 100 + "%");
                 }
-
-                else {
-                    System.out.println("Путь указан верно");
-                    count++;
-                    System.out.println("Это файл номер " + count);
-
-
-            try {
-                FileReader fileReader = new FileReader(path);
-                BufferedReader reader = new BufferedReader(fileReader);
-                String line;
-                while ((line = reader.readLine()) != null){
-                    countline++;
-                    int lenght = line.length();
-                    if(lenght>1024){
-                        throw new LenghtExeption("строка превышает длину в 1024 символа");
-                    }
-                    if(maxlengh<lenght){
-                        maxlengh=lenght;
-                    }
-                    if(minlengh==0){
-                        minlengh = lenght;
-                    }else {
-                        if(minlengh>lenght){
-                        minlengh=lenght;
-                    }
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
             }
-            System.out.println("общее количество строк в фале: " + countline);
-            System.out.println("Самая длинная строка: " + maxlengh);
-            System.out.println("Самая короткая строка: " + minlengh);
+
+
+
+
+
+
+
 
         }
-        }
-
-
-
-
-
-
-
-
-    }
 }
