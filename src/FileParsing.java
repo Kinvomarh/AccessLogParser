@@ -7,16 +7,16 @@ import java.util.ArrayList;
 public class FileParsing {
     private String path;
     private File file;
-    private ArrayList<String> listLine;
+    private ArrayList<LogEntry> listLine;
 
     private int countLine;
 
     //Приватный конструктор объект создается отдельным методом
 
-    private FileParsing(String path, File file, ArrayList<String> listLine) {
+    private FileParsing(String path, File file, ArrayList<LogEntry> pars) {
         this.path = path;
         this.file = file;
-        this.listLine = new ArrayList<>(listLine);
+        this.listLine = new ArrayList<>(pars);
         this.countLine = this.listLine.size();
 
     }
@@ -25,7 +25,7 @@ public class FileParsing {
     public static FileParsing fileParsing(String path) {
         File file = new File(path);
         if (checkFile(file)) {
-            return new FileParsing(path, file, pers(path));
+            return new FileParsing(path, file, pars(path));
         }
         return null;
     }
@@ -39,7 +39,7 @@ public class FileParsing {
         return file;
     }
 
-    public ArrayList<String> getListLine() {
+    public ArrayList<LogEntry> getListLine() {
         return listLine;
     }
 
@@ -47,20 +47,19 @@ public class FileParsing {
         return countLine;
     }
 
-    //метод парсинга файла возвращающий лист строк
-    private static ArrayList<String> pers(String path) {
-        ArrayList<String> listRes = new ArrayList<>();
+    //метод парсинга файла возвращающий лист LogEntry
+    private static ArrayList<LogEntry> pars(String path) {
+        ArrayList<LogEntry> listRes = new ArrayList<>();
         int count = 0;
 
         try {
             FileReader fileReader = new FileReader(path);
             BufferedReader reader = new BufferedReader(fileReader);
-
             String line;
 
             while ((line = reader.readLine()) != null) {
-                LineParsing.chekLine(line, count++);
-                listRes.add(line);
+                LogEntry.chekLine(line, count++);
+                listRes.add(new LogEntry(line));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
