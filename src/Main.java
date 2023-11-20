@@ -38,8 +38,15 @@ public class Main {
                     System.out.println(statistic.totalTraffic);
                     System.out.println(statistic.getTrafficRate());
 
-                    HashMap<String, Double> systemsMap = statistic.getOperSystemStat();
+                   HashMap<String, Double> systemsMap = statistic.getOperSystemStat();
                     for (Map.Entry<String, Double> entry: systemsMap.entrySet()){
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        System.out.println("Система: " + key + "; доля: " + value);
+                    }
+
+                    HashMap<String, Double> browserMap = statistic.getBrowserStat();
+                    for (Map.Entry<String, Double> entry: browserMap.entrySet()){
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         System.out.println("Система: " + key + "; доля: " + value);
