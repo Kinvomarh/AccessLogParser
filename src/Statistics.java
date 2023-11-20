@@ -99,7 +99,7 @@ public class Statistics {
             allCount += entry.getValue();
         }
         for (Map.Entry<String, Integer> entry: browsers.entrySet()){
-            res.put(entry.getKey(), (entry.getValue()/(double)allCount)*100);
+            res.put(entry.getKey(), (entry.getValue()/(double)allCount));
         }
         return res;
     }
