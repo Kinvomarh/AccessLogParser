@@ -2,9 +2,9 @@
 public class UserAgent {
 
     private String userAgent;
-    final String bot;
-    final String system;
-    final String browser;
+    private final String bot;
+    private final String system;
+    private final String browser;
 
 
 
@@ -58,6 +58,13 @@ public class UserAgent {
     public String parsSystem (String userAgent){
         String pars = userAgent;
         String res = "";
+        if(pars.contains("KHTML, like Gecko")){
+            pars = pars.substring(0,pars.indexOf("KHTML, like Gecko")-1);
+        }
+        if(pars.contains("compatible")){
+            pars = pars.substring(0,pars.indexOf("compatible")-1);
+        }
+        pars.trim();
         if(pars.indexOf("(")!=-1 && pars.indexOf(")")!=-1) {
             pars = pars.substring(pars.indexOf("(") + 1, pars.indexOf(")"));
             String[] parsingSystem;

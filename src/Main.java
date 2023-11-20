@@ -1,12 +1,12 @@
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-            //while (true) {
+            while (true) {
                 int countLine;
                 int countYandexBot = 0;
                 int countGoogleBot = 0;
@@ -23,6 +23,7 @@ public class Main {
                                 countYandexBot++; // Подсчитываем количество YandexBot
                             if (fileParsing.getListLine().get(i).getUserAgent().getBot() != null && fileParsing.getListLine().get(i).getUserAgent().getBot().equals("Googlebot"))
                                 countGoogleBot++; // Подсчитываем количество Googlebot
+
                             }
                         }
 
@@ -37,7 +38,20 @@ public class Main {
                     System.out.println(statistic.totalTraffic);
                     System.out.println(statistic.getTrafficRate());
 
-                //}
+                    HashMap<String, Double> systemsMap = statistic.getOperSystemStat();
+                    for (Map.Entry<String, Double> entry: systemsMap.entrySet()){
+                        String key = entry.getKey();
+                        Double value = entry.getValue();
+                        System.out.println("Система: " + key + "; доля: " + value);
+                    }
+
+
+                    ArrayList<String> pages = statistic.getPages();
+                    for(String page: pages){
+                        System.out.println(page);
+                    }
+
+                }
             }
         }
 }
