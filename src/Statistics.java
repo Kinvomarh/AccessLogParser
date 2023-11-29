@@ -9,32 +9,65 @@ import java.util.Map;
 public class Statistics {
 
     long  totalTraffic;
+    long totalVisitUser;
     LocalDateTime minTime;
     LocalDateTime maxTime;
+    int invalidRequest;
     HashSet<String> pages = new HashSet<>();
+    HashSet<String> ipUsers = new HashSet<>();
     HashMap<String, Integer> systems = new HashMap<>();
     HashMap<String, Integer> browsers = new HashMap<>();
 
 
+
+
     public Statistics() {
         this.totalTraffic = 0;
+        this.totalVisitUser = 0;
+        this.invalidRequest =0;
     }
 
     //Метод расчета трафика по часам
     public long getTrafficRate(){
-       Duration duration = Duration.between(minTime, maxTime);
-       long diffHour = duration.toHours();
-       System.out.println(diffHour);
-       if(diffHour!=0) {
-           return totalTraffic / diffHour;
+       if(allHours()!=0) {
+           return totalTraffic / allHours();
        }
        else return totalTraffic;
     }
-    //Метод расчета общего трафика и выделения минимального и максимального метода
-    public void addEntry(LogEntry logEntry) {
+    //метод подсчета среднего посещения сайта с разбивкой по пользователям
+    public long getVisitsRateOnHour(){
+        if(allHours()!=0){
+            return totalVisitUser / allHours();
+        }
+        else return totalVisitUser;
+    }
 
+    //Метод подсчета среднего количества ошибочных запросов за час
+    public long getInvalidRequestRateOnHour(){
+        if(allHours()!=0) {
+            return invalidRequest / allHours();
+        }
+        else return invalidRequest;
+    }
+    //Метод расчёта средней посещаемости одним пользователем
+    public long getVisitIndividualUserRate(){
+        return totalVisitUser/ipUsers.size();
+    }
+
+    //Метод расчета общего трафика и выделения минимального и максимального времени
+    public void addEntry(LogEntry logEntry) {
         LocalDateTime dateTime = logEntry.getDate();
+        //Вычисление общего трафика
+
         totalTraffic += logEntry.getResponseSize();
+
+        //Вычисление общего количества посещений пользователями (не ботами)
+        //Заполнение Set уникальными IP пользователей (Не ботами)
+        if(!logEntry.getUserAgent().isBot) {
+            totalVisitUser += 1;
+            ipUsers.add(logEntry.getIp());
+        }
+
         // Задаем минимальную и максимальную даты
         if (minTime == null) minTime = dateTime;
         if (maxTime == null) maxTime = dateTime;
@@ -44,6 +77,7 @@ public class Statistics {
         } else if (minTime.isAfter(dateTime)) {
             minTime = dateTime;
         }
+
         // заполняем коллекцию в которой хранятся все страницы сайта
         if (logEntry.getResponseCode() == 200) {
             pages.add(logEntry.getLastPage());
@@ -51,6 +85,11 @@ public class Statistics {
         if (logEntry.getResponseCode() == 404) {
             pages.add(logEntry.getLastPage());
         }
+        String responceCode = String.valueOf(logEntry.getResponseCode());
+        if(responceCode.substring(0,1).equals("4") || responceCode.substring(0,1).equals("5")){
+            this.invalidRequest+=1;
+        }
+
         // заполняем MAP в которой хранится операционная система и количество вызовов с неё
         if (logEntry.getUserAgent().getSystem() != null && !logEntry.getUserAgent().getSystem().isEmpty()) {
             String sys = logEntry.getUserAgent().getSystem();
@@ -60,7 +99,7 @@ public class Statistics {
                 systems.put(sys, 1);
             }
         }
-
+        //Заполняем MAP в которой хранится браузер и количество вызовов с него
         if (logEntry.getUserAgent().getBrowser() != null && !logEntry.getUserAgent().getBrowser().isEmpty()) {
             String brow = logEntry.getUserAgent().getBrowser();
             if (browsers.containsKey(brow)) {
@@ -71,6 +110,7 @@ public class Statistics {
 
         }
     }
+
 
     public ArrayList<String> getPages(){
         return new ArrayList<>(pages);
@@ -102,6 +142,10 @@ public class Statistics {
             res.put(entry.getKey(), (entry.getValue()/(double)allCount));
         }
         return res;
+    }
+
+    public long allHours(){
+        return Duration.between(minTime, maxTime).toHours();
     }
 
 

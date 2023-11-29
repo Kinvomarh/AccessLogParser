@@ -7,6 +7,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
             while (true) {
+
                 int countLine;
                 int countYandexBot = 0;
                 int countGoogleBot = 0;
@@ -27,16 +28,19 @@ public class Main {
                             }
                         }
 
-
-
-
                     System.out.println("Общее количество строк в файле: " + countLine);
                     System.out.println("Доля YandexBot: " + (double) countYandexBot / countLine * 100 + "%");
                     System.out.println("Доля GoogleBot: " + (double) countGoogleBot / countLine * 100 + "%");
-                    System.out.println(statistic.minTime);
-                    System.out.println(statistic.maxTime);
-                    System.out.println(statistic.totalTraffic);
-                    System.out.println(statistic.getTrafficRate());
+                    System.out.println("Минимальное время: " + statistic.minTime);
+                    System.out.println("Максимальное время: " + statistic.maxTime);
+                    System.out.println("Общий трафик: " + statistic.totalTraffic);
+                    System.out.println("средний трафик за час: " +  statistic.getTrafficRate());
+
+                    System.out.println("среднее количество посещений за час: " + statistic.getVisitsRateOnHour());
+                    System.out.println("среднее количество ошибочный запросов за час : " + statistic.getInvalidRequestRateOnHour());
+                    System.out.println("среднее количество посещений одним пользователем : " + statistic.getVisitIndividualUserRate());
+
+
 
                    HashMap<String, Double> systemsMap = statistic.getOperSystemStat();
                     for (Map.Entry<String, Double> entry: systemsMap.entrySet()){
@@ -44,19 +48,20 @@ public class Main {
                         Double value = entry.getValue();
                         System.out.println("Система: " + key + "; доля: " + value);
                     }
+                    System.out.println("*----------------------------------------------");
 
                     HashMap<String, Double> browserMap = statistic.getBrowserStat();
                     for (Map.Entry<String, Double> entry: browserMap.entrySet()){
                         String key = entry.getKey();
                         Double value = entry.getValue();
-                        System.out.println("Система: " + key + "; доля: " + value);
+                        System.out.println("Браузер: " + key + "; доля: " + value);
                     }
 
 
-                    ArrayList<String> pages = statistic.getPages();
-                    for(String page: pages){
-                        System.out.println(page);
-                    }
+
+
+
+
 
                 }
             }
