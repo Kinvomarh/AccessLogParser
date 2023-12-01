@@ -1,7 +1,3 @@
-import java.io.ByteArrayInputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
@@ -24,9 +20,9 @@ public class Main {
                                 countYandexBot++; // Подсчитываем количество YandexBot
                             if (fileParsing.getListLine().get(i).getUserAgent().getBot() != null && fileParsing.getListLine().get(i).getUserAgent().getBot().equals("Googlebot"))
                                 countGoogleBot++; // Подсчитываем количество Googlebot
-
                             }
                         }
+
 
                     System.out.println("Общее количество строк в файле: " + countLine);
                     System.out.println("Доля YandexBot: " + (double) countYandexBot / countLine * 100 + "%");
@@ -40,9 +36,20 @@ public class Main {
                     System.out.println("среднее количество ошибочный запросов за час : " + statistic.getInvalidRequestRateOnHour());
                     System.out.println("среднее количество посещений одним пользователем : " + statistic.getVisitIndividualUserRate());
 
+                    System.out.println("Пиковая нагрузка в секунду: " + statistic.peakVisitPerSecond().get(0) + " секунда " + statistic.peakVisitPerSecond().get(1) + " количество посещений");
+                    for (String res: statistic.domainName){
+                        System.out.println(res);
+                    }
 
 
-                   HashMap<String, Double> systemsMap = statistic.getOperSystemStat();
+                    for (Map.Entry<String, Integer> entry : statistic.getPeakIpAndVisitUser().entrySet()){
+                        System.out.println("Ip Пользователя с максимальным посещением: " + entry.getKey() +" Количество посещений: " + entry.getValue());
+                    }
+
+
+
+
+                   /*HashMap<String, Double> systemsMap = statistic.getOperSystemStat();
                     for (Map.Entry<String, Double> entry: systemsMap.entrySet()){
                         String key = entry.getKey();
                         Double value = entry.getValue();
@@ -55,7 +62,7 @@ public class Main {
                         String key = entry.getKey();
                         Double value = entry.getValue();
                         System.out.println("Браузер: " + key + "; доля: " + value);
-                    }
+                    }*/
 
 
 

@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -68,7 +67,7 @@ public class LogEntry {
         return this.responseSize;
     }
 
-    public String getLastPage() {
+    public String getReferer() {
         return this.referer;
     }
 
